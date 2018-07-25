@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>PMM | India</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0;font-family: 'Helvetica Neue', Helvetica, Arial, Sans-serif; }
+        #map { position:absolute; top:0; bottom:0; width:100%;}
+		#console {
+		position: absolute;
+		margin: 10px;
+		width: 240px;
+		background-color: rgba(255,255,255, 0.65);
+		padding: 10px 20px;
+		}
+		
+		.session {
+		margin-bottom: 20px;
+		}
+		
+		.row {
+		height: 12px;
+		width: 100%;
+		}
+		
+		.colors {
+		background: linear-gradient(to right, #0000ff, #4d78f9, #64fcfc, #a8faa8, #f9f966, #f98e67);
+		margin-bottom: 5px;
+		}
+		
+		.label {
+		width: 15%;
+		display: inline-block;
+		text-align: center;
+		}
+		h2 {
+			color: rgb(62, 9, 126);
+		}
+		h4 {
+			color: rgb(47, 47, 240);
+		}
+    </style>
+</head>
+<body>
+	<div id="map"></div>
+	<div id="console">
+		<div class='session'>
+			<h2>Precipitation</h2>
+			<h4>3 Hours Accumulated Railfall</h4>
+		<div class='row colors'></div>
+		<div class='row labels'>
+			<div class='label'>1</div>
+			<div class='label'>2</div>
+			<div class='label'>3</div>
+			<div class='label'>5</div>
+			<div class='label'>10</div>
+			<div class='label'>20+</div>
+			<div class='label'>mm/hr</div>
+		</div>
+		</div>
+	</div>
+</div>
+    <script>
+		mapboxgl.accessToken = 'pk.eyJ1Ijoic2Fpa2F0LTIxIiwiYSI6ImNpdDJucTJocTAwYngyenBkMWRjN2UyMGoifQ.DiBcaXH9Ig_CLPSmq8WplA';
+		var map = new mapboxgl.Map({
+			container: 'map',
+			style: 'mapbox://styles/mapbox/dark-v9', // the outdoors-v10 style but without Hillshade layers
+			center: [82, 23],
+			maxBounds: [ [-180, -90], [180, 90] ],
+			zoom: 3,
+			minZoom:2,
+			maxZoom: 4.99
+		});
+        map.on('load', function () {
+        map.addLayer({
+            'source': {
+                'type': 'geojson',
+                'data': '{{ rainData|safe }}'
+            },
+            'id': 'precip',
+            'type': 'heatmap',
+			//'source': 'composite',
+			//'source-layer': 'precip',
+			'maxzoom': 5,
+            "layout": {},
+            "paint": {
+                "heatmap-color": [
+                    "interpolate",
+                    [
+                        "linear"
+                    ],
+                    [
+                        "heatmap-density"
+                    ],
+                    0,
+                    "rgba(0, 0, 255, 0)",
+                    0.1,
+                    "hsla(225, 94%, 64%, 0.7)",
+                    0.3,
+                    "hsl(180, 96%, 69%)",
+                    0.5,
+                    "hsl(120, 90%, 82%)",
+                    0.7,
+                    "hsl(60, 93%, 69%)",
+                    1,
+                    "hsl(16, 92%, 69%)"
+                ],
+                "heatmap-opacity": [
+                    "interpolate",
+                    [
+                        "linear"
+                    ],
+                    [
+                        "zoom"
+                    ],
+                    2,
+                    0.55,
+					3.5,
+					0.65,
+                    5,
+                    0.75
+                ],
+                "heatmap-radius": [
+                    "interpolate",
+                    [
+                        "linear"
+                    ],
+                    [
+                        "zoom"
+                    ],
+                    0,
+                    20,
+                    5,
+                    30
+                ],
+                "heatmap-weight": [
+                    "interpolate",
+                    [
+                        "linear"
+                    ],
+                    [
+                        "zoom"
+                    ],
+                    0,
+                    0.5,
+                    5,
+                    0.5
+                ],
+                "heatmap-intensity": [
+                    "interpolate",
+                    [
+                        "linear"
+                    ],
+                    [
+                        "zoom"
+                    ],
+                    2,
+                    0.05,
+                    3,
+                    0.15,
+                    4,
+                    0.25,
+                    5,
+                    0.35,
+					6,
+					0.45,
+                    7,
+                    2,
+                    8,
+                    5,
+                    9,
+                    10
+                ],
+                "heatmap-opacity": 0.55,
+                "heatmap-radius": 7,
+                "heatmap-weight": 1
+            }
+        });
+	});
+
+    </script>
+</body>
+</html>
