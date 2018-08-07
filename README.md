@@ -1,8 +1,7 @@
-## Welcome to GitHub Pages
+## Welcome to PMM (Precipitation Measurement Mission) Data Visualization Page
 
-You can use the [editor on GitHub](https://github.com/maiti21/PMM/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Read more about PMM Publisher [here](https://pmmpublisher.pps.eosdis.nasa.gov/docs).
+IMERG (Integrated Multi-satellite Retrievals for GPM) data has [global rainfall coverage](https://pmm.nasa.gov/data-access/downloads/gpm). This data is the combination of all passive-microwave in the GPM(Global Precipitation Measurement) collection.
 
 ### Markdown
 
