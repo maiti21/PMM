@@ -5,17 +5,18 @@ IMERG (Integrated Multi-satellite Retrievals for GPM) data has [global rainfall 
 
 ### Development
 
-```markdown
+```
 git clone https://github.com/maiti21/PMM.git
+```
 
 ### Usage: Deploying on Google App Engine
-```markdown
+```
 git clone https://github.com/maiti21/PMM.git
 cd PMM
 pip install -t lib -r requirements.txt
 gcloud init
 gcloud app deploy
-
+```
 
 ### Support or Contact
 
