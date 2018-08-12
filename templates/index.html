@@ -45,142 +45,84 @@
     </style>
 </head>
 <body>
-	<div id="map"></div>
-	<div id="console">
-		<div class='session'>
-			<h2>Precipitation</h2>
-			<h4>3 Hours Accumulated Railfall</h4>
-		<div class='row colors'></div>
-		<div class='row labels'>
-			<div class='label'>1</div>
-			<div class='label'>2</div>
-			<div class='label'>3</div>
-			<div class='label'>5</div>
-			<div class='label'>10</div>
-			<div class='label'>20+</div>
-			<div class='label'>mm/hr</div>
-		</div>
-		</div>
-	</div>
-</div>
-    <script>
-		mapboxgl.accessToken = 'pk.eyJ1Ijoic2Fpa2F0LTIxIiwiYSI6ImNpdDJucTJocTAwYngyenBkMWRjN2UyMGoifQ.DiBcaXH9Ig_CLPSmq8WplA';
-		var map = new mapboxgl.Map({
-			container: 'map',
-			style: 'mapbox://styles/mapbox/dark-v9', // the outdoors-v10 style but without Hillshade layers
-			center: [82, 23],
-			maxBounds: [ [-180, -90], [180, 90] ],
-			zoom: 3,
-			minZoom:2,
-			maxZoom: 4.99
-		});
-        map.on('load', function () {
-        map.addLayer({
-            'source': {
-                'type': 'geojson',
-                'data': '{{ rainData|safe }}'
-            },
-            'id': 'precip',
-            'type': 'heatmap',
-			//'source': 'composite',
-			//'source-layer': 'precip',
-			'maxzoom': 5,
-            "layout": {},
-            "paint": {
-                "heatmap-color": [
-                    "interpolate",
-                    [
-                        "linear"
-                    ],
-                    [
-                        "heatmap-density"
-                    ],
-                    0,
-                    "rgba(0, 0, 255, 0)",
-                    0.1,
-                    "hsla(225, 94%, 64%, 0.7)",
-                    0.3,
-                    "hsl(180, 96%, 69%)",
-                    0.5,
-                    "hsl(120, 90%, 82%)",
-                    0.7,
-                    "hsl(60, 93%, 69%)",
-                    1,
-                    "hsl(16, 92%, 69%)"
-                ],
-                "heatmap-opacity": [
-                    "interpolate",
-                    [
-                        "linear"
-                    ],
-                    [
-                        "zoom"
-                    ],
-                    2,
-                    0.55,
-					3.5,
-					0.65,
-                    5,
-                    0.75
-                ],
-                "heatmap-radius": [
-                    "interpolate",
-                    [
-                        "linear"
-                    ],
-                    [
-                        "zoom"
-                    ],
-                    0,
-                    20,
-                    5,
-                    30
-                ],
-                "heatmap-weight": [
-                    "interpolate",
-                    [
-                        "linear"
-                    ],
-                    [
-                        "zoom"
-                    ],
-                    0,
-                    0.5,
-                    5,
-                    0.5
-                ],
-                "heatmap-intensity": [
-                    "interpolate",
-                    [
-                        "linear"
-                    ],
-                    [
-                        "zoom"
-                    ],
-                    2,
-                    0.05,
-                    3,
-                    0.15,
-                    4,
-                    0.25,
-                    5,
-                    0.35,
-					6,
-					0.45,
-                    7,
-                    2,
-                    8,
-                    5,
-                    9,
-                    10
-                ],
-                "heatmap-opacity": 0.55,
-                "heatmap-radius": 7,
-                "heatmap-weight": 1
-            }
-        });
+<div id="map"></div>
+<div class='map-overlay' id='features'><div id='pd'></div></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2Fpa2F0LTIxIiwiYSI6ImNpdDJucTJocTAwYngyenBkMWRjN2UyMGoifQ.DiBcaXH9Ig_CLPSmq8WplA';
+var map = new mapboxgl.Map({
+	container: 'map',
+	style: 'mapbox://styles/saikat-21/cjkqbih9n3szr2spjwtwz0gqf',
+	center: [82, 23],
+	maxBounds: [ [-180, -85], [180, 85] ],
+	zoom: 3,
+	minZoom:2,
+	maxZoom: 9
+});
+var nav = new mapboxgl.NavigationControl();
+map.addControl(nav, 'top-left');
+map.getCanvas().style.cursor = 'default';
+var scale = new mapboxgl.ScaleControl({
+    maxWidth: 100,
+    unit: 'imperial'
+});
+map.addControl(scale);
+scale.setUnit('metric');
+var url = '{{rainData | safe}}';
+map.on('load', function(){
+	window.setInterval(function(){
+		map.getSource('precip').setData(url);
+	},6000);
+	map.addSource('precip', {type: 'geojson', data: url});
+	map.addLayer({
+		'id': 'precip',
+		'type': 'fill',
+		'source': 'precip',
+		'maxzoom': 9.1,
+		'layout': {},
+		'paint': {
+			"fill-color": [
+				"interpolate",
+				[
+					"linear"
+				],
+				[
+					"get",
+					"precip"
+				],
+				1,
+				"#E3F2FD",
+				2,
+				"#90CAF9",
+				3,
+				"#42A5F5",
+				5,
+				"#3F51B5",
+				10,
+				"#5E35B1",
+				20,
+				"#8E24AA",
+				40,
+				"#6A1B9A",
+				60,
+				"#4A148C",
+				80,
+				"#880E4F"
+			],
+			"fill-opacity": 0.35,
+			"fill-outline-color": "hsla(0, 0%, 0%, 0)"
+		}
 	});
-
-    </script>
+map.on('mousemove', function(e) {
+  var rain = map.queryRenderedFeatures(e.point, {
+    layers: ['precip']
+  });
+  if (rain.length > 0) {
+    document.getElementById('pd').innerHTML = '<h4><strong>' + rain[0].properties.precip + '</strong> mm./hour rainfall in last 3 hours</h4>';
+  } else {
+    document.getElementById('pd').innerHTML = '<h4><p>No rainfall in this area!</p></h4>';
+  }
+});
+});
+</script>
 </body>
 </html>
