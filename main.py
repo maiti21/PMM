@@ -20,7 +20,7 @@ def getJson():
 	yesterday = date.today() - timedelta(1)
 	startTime = yesterday.strftime('%Y-%m-%d')
 	endTime = str(date.today())
-	url = 'https://pmmpublisher.pps.eosdis.nasa.gov/opensearch?q='+accumulated_rainfall+'&lat=60&lon=180&limit=2&startTime='+startTime+'&endTime='+endTime+''
+	url = 'https://pmmpublisher.pps.eosdis.nasa.gov/opensearch?q='+accumulated_rainfall+'&lat=60&lon=180&limit=10&startTime='+startTime+'&endTime='+endTime+''
 	data = requests.get(url).json()
 	format_data = data['items'][0]['action'][5]
 	#Extract geojson url from request
