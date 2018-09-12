@@ -3,11 +3,12 @@ from flask import Flask, request, session, g, redirect, \
 import os
 import requests
 from datetime import date, timedelta
+from flask_cors import CORS
 import json
 
 DEBUG = True
 app = Flask(__name__)
-
+CORS(app)
 ##MAPBOX_ACCESS_KEY = app.config['MAPBOX_ACCESS_KEY']
 
 @app.route('/')
