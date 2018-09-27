@@ -81,7 +81,7 @@ map.on('mousemove', function(e) {
     layers: ['precip']
   });
   if (rain.length > 0) {
-    document.getElementById('pd').innerHTML = '<h4><strong>' + rain[0].properties.precip + '</strong> mm./hour rainfall in last 3 hours</h4>';
+    document.getElementById('pd').innerHTML = '<h4><strong>' + rain[0].properties.precip + '</strong> mm. accumulated rainfall in last 3 hours</h4>';
   } else {
     document.getElementById('pd').innerHTML = '<h4><p>No rainfall in this area!</p></h4>';
   }
