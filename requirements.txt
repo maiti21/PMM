@@ -4,6 +4,6 @@ geojson==2.4.0
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==0.23
-requests==2.19.1
+requests==2.20.0
 Werkzeug==0.11.11
 Flask-Cors==3.0.6 
